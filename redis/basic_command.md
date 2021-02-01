@@ -44,3 +44,41 @@
   `LPOP key` 左边弹出  
     
   `RPOP key` 右边弹出
+  
+  `LRANGE key start stop` 返回列表【start...stop】元素，左闭右闭区间  
+   
+  `LREM key count value` 删除key列表中前count个值为value的元素  
+    
+## 集合类型操作  
+  
+底层实现是使用值为空的hash表  
+  
+  `SADD key member [member2...]`增加元素，返回成功增加的元素个数  
+  
+  `SREM key member [member2...]`删除元素，返回成功删除的元素个数，可能不存在  
+  
+  `SMEMBERS key`获取集合中所有元素  
+  
+  `SISMEMBER key member`判断元素member是否在集合key中
+  
+  `SDIFF key1 key2`对称差
+  
+  `SINTER key1 key2`交集  
+  
+  `SUNION key1 key2`并集  
+  
+## 有序集合类型操作  
+  
+底层实现采用hash表和跳跃表，所以与列表不同，读取中间的元素也可以很快O(logN)，可以简单调整元素的位置。  
+  
+但是更加耗费内存  
+  
+  `ZADD key score member [score2 member2...]` 向有序集合中加入一个元素和元素的分数，这个命令也可以用来修改已经存在的元素的分数  
+  
+  `ZSCORE key member` 获得元素的分数  
+  
+  `ZRANGE key start stop [WITHSCORE]` 获得排名在【start..stop】之间的元素列表（及分数）  
+  
+  `ZRANGEBYSCORE key min max [WITHSCORE][LIMIT offset count]` 获得分数在min，max之间及两端的元素列表  
+  
+  
