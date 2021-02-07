@@ -23,7 +23,36 @@ go：利用go协程，不在OS层上面抽象，而是替代OS的线程
 - goroutine  
   
 > - 本质上是一种协程，但是不定义自己的停止点和再进入点，而是通过go runtime管理  
-  
 > - goruntime会关注goroutine的运行状态并在goroutine阻塞时挂起他们；在他们不阻塞的时候恢复他们  
-  
 > - 所以在操作系统层面goroutine变成了可抢占的，但是他们只会在阻塞的时候被抢占（我不知道为什么这里还算是抢占调度）  
+  
+## goroutine代码示例  
+  
+1. 关于引用值  
+  
+下述代码示例最后的结果是会打印三次good day  
+
+    var wg sync.WaitGroup
+    for _, salutation := range []string{"hello", "greetings", "good day"} {
+        wg.Add(1)
+        go func() {
+            defer wg.Done()
+            fmt.Println(salutation)
+        }()
+    }
+    wg.Wait()  
+  
+出现这样结果的原因是循环遍历大概率会在goroutine开始之前结束，  
+  
+所以这个时候三个goroutine中的salutation都会指向一个range结束之后的单元  
+  
+但是由于go的垃圾回收机制，它会监测到salutation还有引用  
+  
+所以将salutation变量的内存搬到堆空间，并恢复其最后一个值也就是good day  
+  
+2. 关于go协程泄漏  
+  
+因为go的垃圾回收机制是不会回收goroutine的  
+  
+所以如果有一个goroutine内部是一个永远都被block的操作，它就一直占用内存直到程序终止  
+  
