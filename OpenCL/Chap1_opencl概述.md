@@ -20,7 +20,7 @@
     - context：host和其他devices通过context联系
     - program：program是一个装kernels的容器
     - command queue：host从program中取出kernel，将参数和kernel联系上，传给不同devide的command queue
-    - 整体架构![整体架构](./archi.png)
+    - 整体架构![整体架构](./img/archi.png)
     - task parallelism:openCL除了数据层面的并行，还提供task层面的并行，不同的device可以执行不同的task；优于其他只有data parallelism的并行
     - device内部通常不止一个computing element，所以device内部也有并行
 ## 核心流程
