@@ -85,3 +85,10 @@ for(i=0; i<Z; i++) {
 - 特定的{i,j,k}序列就是work-item的global id，它唯一标记了一个work-item以及它应该接触到的data
 - global id中的数据数量也就是维度，work dims，在这里是3
 - minimum work dims=1，maximum dims取决于devices，通过调用clGetDeviceInfo查询CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS获得
+- work_group:
+    - 一个compute unit上跑一个work group
+    - 一个work group可以执行多个work item
+    - 同一个work group里的work item可以访问同一片高速缓存区
+    - 同一个work group中的work item可以通过栅栏同步（栅栏就类似Go里面的waitGroup，等待所有进程都运行到一定阶段进行放行的那种）
+    - local_work_size参数：一个work_group中有多少work_item，可以设置为NULL，由OpenCL编译器自行优化（也就是我要做的工作）
+    
